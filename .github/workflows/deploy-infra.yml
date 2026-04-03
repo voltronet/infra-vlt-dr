@@ -30,12 +30,12 @@ jobs:
         id: plan
         run: terraform -chdir=environments/test plan -no-color
         env:
-          TF_VAR_my_ip_address: ${{ secrets.TF_VAR_my_ip_address }}
+          TF_VAR_my_ip_address: ${{ vars.TF_VAR_my_ip_address }}
           TF_VAR_ssh_key_name: ${{ secrets.TF_VAR_ssh_key_name }}
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform -chdir=environments/test apply -auto-approve
         env:
-          TF_VAR_my_ip_address: ${{ secrets.TF_VAR_my_ip_address }}
+          TF_VAR_my_ip_address: ${{ vars.TF_VAR_my_ip_address }}
           TF_VAR_ssh_key_name: ${{ secrets.TF_VAR_ssh_key_name }}
