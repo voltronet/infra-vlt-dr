@@ -6,14 +6,14 @@ variable "ssh_key_name" {
   type = string
 }
 
-variable "cloudflare_token" {
-  type      = string
-  sensitive = true
-}
+# variable "cloudflare_token" {
+#   type      = string
+#   sensitive = true
+# }
 
-variable "cloudflare_zone_id" {
-  type = string
-}
+# variable "cloudflare_zone_id" {
+#   type = string
+# }
 
 variable "deploy_ecs" {
   type    = bool
