@@ -1,34 +1,12 @@
-resource "aws_vpc" "this" {
-  cidr_block           = var.vpc_cidr
-  enable_dns_hostnames = true
-  tags = {
-    Name = "drcarmen-vpc-${var.env}"
-  }
+resource "aws_s3_bucket" "app_assets" {
+  bucket = "drcarmen-assets-${var.env}-${var.random_id}"
 }
 
-resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.this.id
-  cidr_block              = var.public_subnet_cidr
-  map_public_ip_on_launch = true
-  availability_zone       = var.az
-  tags = {
-    Name = "drcarmen-public-sn-${var.env}"
-  }
-}
+resource "aws_s3_bucket_public_access_block" "block_public" {
+  bucket = aws_s3_bucket.app_assets.id
 
-resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.this.id
-}
-
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.this.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.this.id
-  }
-}
-
-resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }

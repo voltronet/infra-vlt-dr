@@ -1,10 +1,26 @@
-provider "aws" {
-  region = "eu-central-1"
+# environments/test/main.tf
+
+terraform {
+  required_providers {
+    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    #cloudflare = { source = "cloudflare/cloudflare", version = "~> 4.0" }
+  }
 }
 
-provider "cloudflare" {
-  api_token = var.cloudflare_token
+provider "aws" {
+  region  = "eu-central-1"
+  profile = "airimus"
+  assume_role {
+    role_arn     = "arn:aws:iam::995487091999:role/stsAsumeRoleCopilot"
+    session_name = "TerraformDrCarmenDeployment"
+  }
 }
+
+# provider "cloudflare" {
+#   api_token = var.cloudflare_token
+# }
+
+# VERIFICĂ DACĂ AI ACESTE BLOCURI ȘI DACĂ AU CONȚINUT:
 
 module "vpc" {
   source             = "../../modules/vpc"
@@ -29,13 +45,13 @@ module "compute" {
   my_ip         = var.my_ip_address
   key_name      = var.ssh_key_name
   deploy_ecs    = var.deploy_ecs
-  instance_type = "r5.large"
+  instance_type = "t3.small"
 }
 
-resource "cloudflare_record" "app_dns" {
-  zone_id = var.cloudflare_zone_id
-  name    = "staging"
-  value   = var.deploy_ecs ? "127.0.0.1" : module.compute.server_public_ip
-  type    = "A"
-  proxied = true
-}
+# resource "cloudflare_record" "app_dns" {
+#   zone_id = var.cloudflare_zone_id
+#   name    = "staging"
+#   value   = var.deploy_ecs ? "127.0.0.1" : module.compute.server_public_ip
+#   type    = "A"
+#   proxied = true
+# }
