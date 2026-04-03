@@ -9,7 +9,7 @@ terraform {
 
 provider "aws" {
   region  = "eu-central-1"
-  profile = "airimus"
+  #profile = "airimus"
   assume_role {
     role_arn     = "arn:aws:iam::995487091999:role/stsAsumeRoleCopilot"
     session_name = "TerraformDrCarmenDeployment"
