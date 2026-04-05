@@ -1,16 +1,26 @@
-name: "Terraform Deploy Infra"
+name: "Terraform Dynamic Deploy"
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      target_env:
+        description: 'Alege mediul pentru deployment'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+          - test
+          - staging
+          - prod
 
 jobs:
   terraform:
+    name: "Deploy to ${{ github.event.inputs.target_env }}"
     runs-on: ubuntu-latest
-    environment: TEST
-    # AICI ESTE SECRETUL: Injectăm variabilele de mediu pentru tot JOB-ul
+    
+    # AICI se întâmplă magia: GitHub caută Environment-ul care se potrivește cu alegerea ta
+    environment: ${{ github.event.inputs.target_env || 'test' }}
+    
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -24,16 +34,11 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform -chdir=environments/test init
-
-      - name: Check aws configure
-        run: aws configure list
+        # Folosim variabila de input pentru a intra în folderul corect
+        run: terraform -chdir=environments/${{ github.event.inputs.target_env || 'test' }} init
 
       - name: Terraform Plan
-        run: terraform -chdir=environments/test plan -no-color
+        run: terraform -chdir=environments/${{ github.event.inputs.target_env || 'test' }} plan -no-color
         env:
-          # Repetăm aici pentru siguranță și adăugăm variabilele de Terraform
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          TF_VAR_my_ip_address: ${{ vars.TF_VAR_my_ip_address }}
-          TF_VAR_ssh_key_name: ${{ secrets.TF_VAR_ssh_key_name }}
+          TF_VAR_ssh_key_name: ${{ secrets.TF_VAR_SSH_KEY_NAME }}
+          TF_VAR_my_ip_address: ${{ vars.TF_VAR_MY_IP_ADDRESS }}
