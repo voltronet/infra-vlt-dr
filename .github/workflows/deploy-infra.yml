@@ -32,6 +32,9 @@ jobs:
         env:
           TF_VAR_my_ip_address: ${{ vars.TF_VAR_my_ip_address }}
           TF_VAR_ssh_key_name: ${{ secrets.TF_VAR_ssh_key_name }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
