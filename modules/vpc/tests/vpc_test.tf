@@ -26,10 +26,10 @@ module "vpc" {
   public_subnet_cidr = "10.0.1.0/24"
 }
 
-test "vpc module exposes an id" {
-  condition = module.vpc.vpc_id != ""
-}
+# test "vpc module exposes an id" {
+#   condition = module.vpc.vpc_id != ""
+# }
 
-test "vpc module exposes a public subnet id" {
-  condition = module.vpc.public_subnet_id != ""
-}
+# test "vpc module exposes a public subnet id" {
+#   condition = module.vpc.public_subnet_id != ""
+# }

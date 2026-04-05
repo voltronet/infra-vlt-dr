@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.5"
+  required_version = ">= 1.7"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 module "storage" {
-  source    = ".."
+  source    = "../../modules/storage"
   env       = "test"
   random_id = "unit-test-1"
 }

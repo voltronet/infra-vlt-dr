@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.5"
+  required_version = ">= 1.7"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 module "compute" {
-  source        = ".."
+  source        = "../../modules/compute"
   env           = "test"
   vpc_id        = "vpc-0123456789abcdef0"
   subnet_id     = "subnet-0123456789abcdef0"
