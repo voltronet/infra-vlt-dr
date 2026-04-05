@@ -1,0 +1,30 @@
+name: "Terraform Module Validation"
+
+# Dedicated infra-vlt-dr validation workflow.
+# This workflow is scoped only to changes under infra-vlt-dr.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'infra-vlt-dr/**'
+      - 'infra-vlt-dr/.github/workflows/validate-modules.yml'
+
+jobs:
+  test-modules:
+    name: "Test and validate infra-vlt-dr modules"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.7.0'
+
+      - name: Run module validation script
+        working-directory: infra-vlt-dr
+        run: |
+          chmod +x ./run-module-tests.sh
+          ./run-module-tests.sh
