@@ -8,8 +8,8 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform"
     runs-on: ubuntu-latest
+    # AICI ESTE SECRETUL: Injectăm variabilele de mediu pentru tot JOB-ul
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -23,22 +23,13 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        id: init
         run: terraform -chdir=environments/test init
 
       - name: Terraform Plan
-        id: plan
         run: terraform -chdir=environments/test plan -no-color
         env:
-          TF_VAR_my_ip_address: ${{ vars.TF_VAR_my_ip_address }}
-          TF_VAR_ssh_key_name: ${{ secrets.TF_VAR_ssh_key_name }}
+          # Repetăm aici pentru siguranță și adăugăm variabilele de Terraform
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform -chdir=environments/test apply -auto-approve
-        env:
-          TF_VAR_my_ip_address: ${{ vars.TF_VAR_my_ip_address }}
+          TF_VAR_my_ip_address: ${{ secrets.TF_VAR_my_ip_address }}
           TF_VAR_ssh_key_name: ${{ secrets.TF_VAR_ssh_key_name }}
