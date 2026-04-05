@@ -1,3 +1,13 @@
+output "IP_SERVER_DR_CARMEN" {
+  description = "IP-ul public pentru acces direct"
+  value       = module.compute.server_public_ip
+}
+
+output "COMANDA_SSH" {
+  description = "Comanda rapida pentru logare"
+  value       = "ssh -i ${var.ssh_key_name}.pem ubuntu@${module.compute.server_public_ip}"
+}
+
 output "DETALII_SERVER_DR_CARMEN" {
   description = "Informatii necesare pentru accesarea infrastructurii"
   value = {

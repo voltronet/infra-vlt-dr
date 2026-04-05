@@ -10,3 +10,4 @@ output "instance_id" {
 output "deployment_type" {
   value = var.deploy_ecs ? "ECS Fargate" : "EC2 Spot"
 }
+
