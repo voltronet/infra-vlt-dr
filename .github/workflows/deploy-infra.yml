@@ -25,6 +25,9 @@ jobs:
       - name: Terraform Init
         run: terraform -chdir=environments/test init
 
+      - name: Check aws configure
+        run: aws configure list
+
       - name: Terraform Plan
         run: terraform -chdir=environments/test plan -no-color
         env:
