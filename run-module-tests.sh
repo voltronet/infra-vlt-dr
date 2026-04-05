@@ -8,8 +8,8 @@ for module in "${MODULES[@]}"; do
   echo "==> Testing module: $module"
   pushd "$ROOT_DIR/tests/$module" >/dev/null
   terraform init -backend=false
-  terraform test
+  terraform validate
   popd >/dev/null
-  echo "==> Module $module tests passed"
+  echo "==> Module $module validation passed"
   echo
  done

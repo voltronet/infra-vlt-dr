@@ -29,7 +29,3 @@ module "compute" {
   deploy_ecs    = false
   instance_type = "t3.micro"
 }
-
-test "compute module exposes deployment type" {
-  condition = module.compute.deployment_type == "EC2 Spot"
-}

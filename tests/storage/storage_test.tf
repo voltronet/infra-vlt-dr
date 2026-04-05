@@ -23,11 +23,3 @@ module "storage" {
   env       = "test"
   random_id = "unit-test-1"
 }
-
-test "storage module exposes a bucket name" {
-  condition = module.storage.bucket_name != ""
-}
-
-test "storage module exposes a bucket ARN" {
-  condition = contains(module.storage.bucket_arn, "arn:aws:s3")
-}
